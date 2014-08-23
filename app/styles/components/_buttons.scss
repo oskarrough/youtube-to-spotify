@@ -1,0 +1,42 @@
+button {
+	-webkit-appearance: none; /* 1 */
+	box-sizing: border-box; /* 2 */
+	color: black; /* 3 */
+	cursor: pointer;
+	display: inline-block;
+	font: inherit; /* 4 */
+	line-height: normal; /* 6 */
+	margin: 0;
+	padding: 0.4em 0.5em 0.3em;
+	border: 0;
+	border-radius: 2px;
+	position: relative;
+	text-align: center;
+	text-decoration: none;
+	user-select: none; /* 6 */
+	white-space: normal; /* 7 */
+	background: transparent;
+	background-color: hsl(75, 53%, 53%);
+	color: #fff;
+	font-weight: bold;
+	text-align: center;
+	-webkit-font-smoothing: antialiased;
+	// Button needs this directly on the element. Inheritance is not enough
+	// -webkit-font-smoothing: antialiased;
+}
+
+/**
+ * UI states
+ */
+
+button:hover,
+button:focus,
+button:active {
+	text-decoration: none;
+	outline: 0;
+}
+
+button:disabled,
+button.is-disabled {
+	cursor: default;
+}
