@@ -9,6 +9,14 @@ $font-header: $font-body;
 $bg-color: hsl(0,0%, 90%) !default;
 $text-color: #141414 !default;
 $header-color: $text-color !default;
+$green: hsl(75, 83%, 40%);
+$red: hsl(10, 74%, 41%);
+$darkred: hsl(0, 73%, 21%);
+$yellow: yellow;
+$blue: hsl(211, 100%, 27%);
+/* hsl(75, 53%, 53%) */
+/* fea600 */
+/* 908f8d */
 
 // Good looking easings for animation
 $easing:  cubic-bezier(0.165,  0.84,  0.4,   1); // fast, good looking

@@ -7,146 +7,182 @@ html {
 *:after {
 	box-sizing: inherit;
 }
-
-/* hsl(75, 53%, 53%) */
-/* #00438a */
-/* fea600 */
-/* 141414 */
-/* 908f8d */
-
 body {
 	margin: 0 1em;
 }
-h2 {
-	font-size: 16px;
-	font-weight: bold;
-	line-height: 1;
-	margin-bottom: 0.5em;
-}
-small {
-	font-size: 0.875em;
-	color: #666;
-}
-.Header {
-	background-color: #00438a;
-	margin: 0 -1em;
+header {
+	background: linear-gradient(to bottom, lighten($red, 5%),$red);
+	margin: 0 -1em 2em;
 	padding: 1em;
+	border-bottom: 4px solid $darkred;
 	color: #fff;
-	border-bottom: 4px solid hsl(210, 100%, 22%);
-}
-
-.Bucket {
-	margin: 1em 0;
-	float: left;
-	width: 50%;
-	padding-right: 2em;
-}
-.Bucket ul {}
-.Bucket li {
-	list-style: none;
-	font-size: 12px;
-	/* border-bottom: 1px solid #ccc; */
-	padding: 0.3em 0.3em 0.2em;
-}
-.Bucket li:nth-child(odd) {
-  background: hsl(0, 0%, 93%);
-}
-.Analyzed {
-	display: none;
-	width: auto;
-	float: none;
-}
-.Analyzed li {
-	display: none;
-}
-.Success {
-	display: none;
-}
-.Success li {
-	display: none;
-}
-.Failed {
-	display: none;
-}
-.Failed h2 {
-	color: red;
-}
-.Failed li {
-	display: none;
-}
-.Matches {
-	clear: both;
-	width: auto;
-	float: none;
-}
-
-/* ::-webkit-placeholder,
-::-moz-placeholder, */
-input,
-button,
-li {
-	font-size: 14px;
 }
 .Playlist {
-	overflow: auto;
+	max-width: 24em;
+	height: 34px;
 }
 .Playlist-label {
 	position: relative;
 	float: left;
-	width: calc(100% - 5.3em);
+	width: calc(100% - 84px);
 }
 .Playlist-input {
 	position: relative;
 	z-index: 1;
+	margin: 0;
 	background-color: #fff;
 	color: $text-color;
-	margin: 0;
+	border-color: $darkred;
 }
 .Playlist-submit {
 	float: right;
-	min-width: 5.5em;
-	transition: background 200ms, transform 300ms ease-out;
+	min-width: 80px;
+	transition: background 200ms, transform 200ms ease-out;
 	transform: translateX(-120%);
-}
-.Playlist-submit.is-visible {
-	transform: translateX(0);
-}
-.is-loading .Playlist-submit {
-	background-color: hsl(60, 100%, 50%);
-	color: #000;
+	&.is-visible {
+		transform: translateX(0);
+	}
+	.is-loading & {
+		background-color: hsl(60, 100%, 50%);
+		color: #000;
+	}
+
+	&.is-visible:before {
+		display: block;
+	}
+	&:before {
+		content: '';
+		display: none;
+		width: 4px;
+		height: 0;
+		position: fixed;
+		top: 100%;
+		left: 80%;
+		z-index: 2;
+		transition: height 500ms ease-out;
+		background-color: $green;
+		.is-done & {
+			height: 130px;
+		}
+	}
 }
 
 .Progress {
 	position: absolute;
 	z-index: 2;
 	top: 0;
-	background-color: black;
 	width: 0;
-    height: 32px;
-    line-height: 32px;
-	transition: width 400ms ease-out;
+	// copy input styles
+	line-height: normal;
 	font-size: 14px;
-	border-radius: 2px;
 	text-align: right;
 	overflow: hidden;
-}
-.is-done .Progress {
-	width: 0 !important;
-	background-color: hsl(75, 53%, 53%);
-}
-.is-failed .Progress {
-	background-color: red;
+	transition: width 400ms ease-out;
+	white-space: nowrap;
+	.is-done & {
+		width: 0 !important;
+		.Progress-inner {
+			background-image: none;
+			background-color: $green;
+		}
+	}
+	.is-failed & .Progress-inner {
+		background-image: none;
+		background-color: $red;
+	}
 }
 .Progress-inner {
-	margin: 0.6em;
+	background-image: linear-gradient(to right, $yellow, $green);
+	margin: 1px;
+	padding: 6px 0.6em;
+	border-radius: 5px;
 }
 
 footer {
 	display: none;
 	clear: both;
 	font-size: 14px;
-	color: #666
-}
-footer a {
 	color: #666;
+	a {
+		color: #666;
+	}
 }
+
+.Results {
+	> p {
+		max-width: 40em;
+	}
+}
+.Bucket {
+	margin: 2em 0;
+	border-radius: 5px;
+	border: 1px solid hsla(0, 0%, 0%, 0.2);
+
+	> p {
+		font-size: 14px;
+		display: inline-block;
+		font-weight: bold;
+		background-color: $yellow;
+		color: $text-color;
+		padding: 0.2em 0.5em;
+	}
+
+	ul {}
+	li {
+		list-style: none;
+		font-size: 12px;
+		padding: 0.5em;
+	}
+	li:nth-child(even) {
+	  background: hsla(0, 0%, 97%, 0.1);
+	}
+	small {
+		display: none;
+		float: right;
+		font-size: 10px;
+		opacity: .6;
+		@media (min-width: 600px) {
+			display: block;
+		}
+	}
+}
+.Bucket-results {
+	margin: 1em;
+}
+.Matches {
+	clear: both;
+	background-color: $green;
+	color: #fff;
+	.Bucket-results:focus {
+		background-color: hsla(60, 100%, 50%, 0.22);
+		outline: 0;
+	}
+}
+.Analyzed {
+	display: none;
+}
+.Success,
+.Failed {
+	display: none;
+	float: left;
+	width: 50%;
+}
+.Success {
+}
+.Failed {
+	h2 {
+		color: red;
+	}
+}
+
+
+.Path {
+  stroke-dasharray: 100;
+  // animation: dash 5s linear;
+}
+@keyframes dash {
+  to {
+    stroke-dashoffset: 1000;
+  }
+}
+
