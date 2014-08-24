@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>YouTube to Spotify playlist converter</title>
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<!-- build:css styles/main.css-->
+			<link rel="stylesheet" href="styles/main.css">
+		<!-- endbuild-->
+		<link href='http://fonts.googleapis.com/css?family=Fira+Mono:400,700' rel='stylesheet' type='text/css'>
+</head>
+<body>
+
+	<script type="text/x-handlebars">
+		 {{outlet}}
+
+		 <footer>
+		 	<p>Made by <a href="http://oskarrough.com">Oskar Rough</a></p>
+		 </footer>
+	</script>
+
+	<script type="text/x-handlebars" id="index">
+		index template
+	</script>
+
+	<script type="text/x-handlebars" data-template-name="convert">
+	<header>
+		<img src="images/youtube-to-spotify.png" alt="YouTube to Spotify">
+		<p><strong>Convert a YouTube playlist to Spotify tracks</strong></p>
+		<p>PL6AEA53CDF028371E</p>
+		<form class="Playlist">
+			<label class="Playlist-label">
+
+				{{input value=id action="toggleSubmit" on="key-press focus blur" placeholder="YouTube playlist ID" class="Playlist-input"}}
+				<div class="Progress">
+					<div class="Progress-inner">
+						<i class="Progress-analyzing">Analyzing</i>
+						<i class="Progress-value"></i>%
+					</div>
+				</div>
+			</label>
+			<button {{action 'convert'}} type="submit" class="Playlist-submit">Convert</button>
+		</form>
+	</header>
+
+	<main>
+	tite: {{title}}<br>
+		id: {{id}}
+		<p class="js-error"></p>
+
+		<div class="Results">
+			<p><i class="js-status">Converted</i> <i class="js-matched"></i> of <i class="js-total"></i> <i>tracks from</i> <strong><i class="js-title"></i></strong>. <span class="js-failed"></span> not found.</p>
+
+			<div class="Bucket Matches">
+				<p>Copy and paste these directly into a Spotify playlist</p>
+				<div class="Bucket-results" contenteditable></div>
+			</div>
+			<div class="Bucket Analyzed">
+				<h2></h2>
+				<div class="Bucket-results"></div>
+			</div>
+			<div class="Bucket Success">
+				<h2>Success</h2>
+				<div class="Bucket-results"></div>
+			</div>
+			<div class="Bucket Failed">
+				<h2>Fail</h2>
+				<div class="Bucket-results"></div>
+			</div>
+		</div>
+
+		</main>
+	</script>
+
+	<script type="text/x-handlebars" id="playlists">
+		{{#each model}}
+			her: {{title}}
+		{{/each}}
+	</script>
+
+	<div class="Scripts">
+		<!-- build:js scripts/vendor.js-->
+		<script src="bower_components/jquery/dist/jquery.js"></script>
+		<script src="bower_components/handlebars/handlebars.js"></script>
+		<script src="bower_components/ember/ember.js"></script>
+		<!-- endbuild-->
+		<!-- build:js scripts/main.js-->
+		<script src="scripts/yts-ember.js"></script>
+		<!-- endbuild-->
+
+	</div>
+
+</body>
+</html>
