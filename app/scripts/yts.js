@@ -24,7 +24,7 @@ var start = 1,
 	$title = $('.js-title');
 
 var model = {
-    id: null,
+	 id: null,
 	title: '',
 	total: 0,
 	analyzed: 0,
@@ -56,7 +56,7 @@ function loadPage(id) {
 
 	// Without argument we take the value of the form
 	if (!id) {
-      console.log('no argument');
+		console.log('no argument');
 		id = $input.val();
 	}
 
@@ -66,15 +66,15 @@ function loadPage(id) {
 		console.log('success');
 	}).done(function(event) {
 		console.log('second success');
-		console.log(event);
+		// console.log(event);
 
-        if (model.id !== event.data.id) {
-          // new playlist
-          clearTexts();
-          clearResults();
-        }
+		if (model.id !== event.data.id) {
+		 // new playlist
+		 clearTexts();
+		 clearResults();
+		}
 
-        model.id = event.data.id;
+		model.id = event.data.id;
 		model.total = event.data.totalItems;
 		setTotal(model.total);
 		model.title = event.data.title;
@@ -82,11 +82,10 @@ function loadPage(id) {
 
 		if (!event.data.items) {
 			console.log('no items');
-            onDone();
+			onDone();
 		} else {
 			render(event.data);
 		}
-
 	}).fail(function(event) {
 		console.log('error');
 		onFail();
@@ -108,9 +107,8 @@ function before() {
 
 function after() {
 	console.log('after');
-	$submit.text('Match').removeAttr('disabled');
+	$submit.text('Convert').removeAttr('disabled');
 	$('body').addClass('is-done').removeClass('is-loading');
-	updateCount();
 }
 
 function onFail() {
@@ -126,7 +124,7 @@ function onEnd() {
 
 function onDone() {
 	$('.Progress-status').text('Analyzed');
-	$('.js-status').text('Matched');
+	$('.js-status').text('Converted');
 	$results.show();
 	after();
 }
@@ -184,7 +182,7 @@ function searchSpotify(items) {
 			insert(name, $failed);
 		}
 
-		updateCount();
+		// updateCount();
 
 		// recursive until there are no more items
 		if (index < items.length - 1) {
@@ -209,18 +207,21 @@ function updateCount() {
 	model.analyzed = $analyzed.find('li').length;
 	model.matched = $success.find('li').length;
 	model.failed = $failed.find('li').length;
-
 	model.progress = Math.round(model.analyzed / model.total * 100);
+	console.log(model.progress);
 	model.matchedPercentage = Math.round(model.matched / model.analyzed * 100);
 
-// 	animateValue('.js-analyzed', model.analyzed, 1000);
-// 	animateValue('.js-matched', model.matched, 1000);
-// 	animateValue('.js-failed', model.failed, 1000);
+	// animateValue('.js-analyzed', model.analyzed, 1000);
+	// animateValue('.js-matched', model.matched, 1000);
+	// animateValue('.js-failed', model.failed, 1000);
+
+	if (model.progress === 100) {
+		onDone();
+	}
 
 	$('.js-analyzed').text(model.analyzed);
 	$('.js-matched').text(model.matched);
 	$('.js-failed').text(model.failed);
-
 	$('.Progress').width(model.progress + '%');
 	$('.Progress-value').text(model.progress + '%');
 	// animateValue('.Progress-value', progress, 2000);
@@ -238,6 +239,7 @@ function setTitle(msg) {
 	}
 }
 
+// would be nice to also filter out all years except 1999
 function filterName(name) {
 	name = name.match(/[\w']+/g)
 	.join(' ')
