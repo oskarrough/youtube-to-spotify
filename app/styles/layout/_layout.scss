@@ -13,13 +13,19 @@ body {
 header {
 	background: linear-gradient(to bottom, lighten($red, 5%),$red);
 	margin: 0 -1em 2em;
-	padding: 1em;
+	padding: 2em 1em 1em;
 	border-bottom: 4px solid $darkred;
 	color: #fff;
+
+	img + p {
+		margin-top: -0.3em;
+		margin-left: 0.3em;
+	}
 }
 .Playlist {
 	max-width: 24em;
 	height: 34px;
+	margin-left: 1.1em;
 }
 .Playlist-label {
 	position: relative;
@@ -43,8 +49,8 @@ header {
 		transform: translateX(0);
 	}
 	.is-loading & {
-		background-color: hsl(60, 100%, 50%);
-		color: #000;
+		// background-color: hsl(60, 100%, 50%);
+		// color: #000;
 	}
 
 	&.is-visible:before {
@@ -64,6 +70,9 @@ header {
 		.is-done & {
 			height: 130px;
 		}
+		.is-failed & {
+			height: 0;
+		}
 	}
 }
 
@@ -82,17 +91,19 @@ header {
 	.is-done & {
 		width: 0 !important;
 		.Progress-inner {
-			background-image: none;
+			// background-image: none;
 			background-color: $green;
 		}
 	}
 	.is-failed & .Progress-inner {
-		background-image: none;
+		// background-image: none;
 		background-color: $red;
 	}
 }
 .Progress-inner {
-	background-image: linear-gradient(to right, $yellow, $green);
+	// background-image: linear-gradient(to right, $yellow, $green);
+	background-image: url(../images/load.gif);
+	background-size: 100%;
 	margin: 1px;
 	padding: 6px 0.6em;
 	border-radius: 5px;
