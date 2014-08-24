@@ -154,7 +154,8 @@ function render(data) {
 
 function renderAnalyzed(data) {
 	for (var i = 0; i < data.items.length; i++) {
-		$analyzed.append('<li>'+ data.items[i].video.title +'</li>');
+		insert(data.items[i].video.title, $analyzed);
+		console.log('insert item');
 		updateCount();
 	}
 }
@@ -171,17 +172,16 @@ function searchSpotify(items) {
 		// success
 		if (e.tracks && e.tracks[0]) {
 			//console.log('success: ', name, e);
-			$success.append('<li>'+ name +'</li>');
 			matches.push(e.tracks[0]);
 			// console.log(e.tracks[0]);
 			// e.tracks[0].name
 			// e.tracks[0].artists[0].name
-			$matches.append('<li>'+ e.tracks[0].href +'</li>');
-
+			insert(name, $success);
+			insert(e.tracks[0].artists[0].name + ' - ' + e.tracks[0].name + '<small>(' + e.tracks[0].href + ')</small>', $matches);
 		// fail
 		} else {
 			//console.log('fail: ', name, e);
-			$failed.append('<li>'+ name +'</li>');
+			insert(name, $failed);
 		}
 
 		updateCount();
@@ -199,6 +199,10 @@ function searchSpotify(items) {
 			loadPage();
 		}
 	});
+}
+
+function insert(item, container) {
+	container.find('.Bucket-results').append('<li>'+ item +'</li>');
 }
 
 function updateCount() {
