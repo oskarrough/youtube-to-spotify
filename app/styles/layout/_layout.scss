@@ -25,7 +25,9 @@ header {
 .Playlist {
 	max-width: 24em;
 	height: 34px;
-	margin-left: 1.1em;
+	@media (min-width: $layout-s) {
+		margin-left: 1.1em;
+	}
 }
 .Playlist-label {
 	position: relative;
@@ -52,9 +54,10 @@ header {
 		// background-color: hsl(60, 100%, 50%);
 		// color: #000;
 	}
-
-	&.is-visible:before {
-		display: block;
+	@media (min-width: $layout-s) {
+		&.is-visible:before {
+			display: block;
+		}
 	}
 	&:before {
 		content: '';
@@ -161,7 +164,7 @@ footer {
 .Bucket-results {
 	margin: 1em;
 }
-.Matches {
+.Success {
 	clear: both;
 	background-color: $green;
 	color: #fff;
@@ -173,28 +176,9 @@ footer {
 .Analyzed {
 	display: none;
 }
-.Success,
 .Failed {
 	display: none;
-	float: left;
-	width: 50%;
-}
-.Success {
-}
-.Failed {
 	h2 {
 		color: red;
 	}
 }
-
-
-.Path {
-  stroke-dasharray: 100;
-  // animation: dash 5s linear;
-}
-@keyframes dash {
-  to {
-    stroke-dashoffset: 1000;
-  }
-}
-
