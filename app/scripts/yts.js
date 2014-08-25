@@ -26,11 +26,13 @@ var model = {
 	id: null,
 	title: '',
 	total: 0,
-	analyzed: 0,
-	matched: 0,
-	failed: 0,
+
+	analyzed: [],
+	success: [],
+	failed: [],
+
 	progress: 0,
-	matchedPercentage: 0
+	successPercentage: 0
 };
 
 // Toggle the button depending on the input
@@ -45,7 +47,8 @@ $input.on('focus keyup change', function (event) {
 $form.on('submit', function (event) {
 	event.preventDefault();
 	index = 0; // why?
-	matches = []; // why?
+	model.success = []; // why?
+	model.id = $input.val();
 	loadPage();
 });
 
@@ -53,11 +56,7 @@ $form.on('submit', function (event) {
 function loadPage(id) {
 	before();
 
-	// Without argument we take the value of the form
-	if (!id) {
-		console.log('no argument');
-		id = $input.val();
-	}
+	var id = model.id;
 
 	var url = 'https://gdata.youtube.com/feeds/api/playlists/' + id;
 	var urlAttributes = '?alt=jsonc&v=2&start-index=' + start + '&max-results=' + apilimit;
@@ -73,15 +72,9 @@ function loadPage(id) {
 		 clearResults();
 		}
 
-		model.id = event.data.id;
-		model.total = event.data.totalItems;
-		setTotal(model.total);
-		model.title = event.data.title;
-		setTitle(model.title);
-
 		if (!event.data.items) {
 			console.log('no items');
-			onDone();
+			// onDone();
 		} else {
 			render(event.data);
 		}
@@ -137,78 +130,88 @@ function render(data) {
 	// data.thumbnail.sq
 
 	$results.show();
-	renderAnalyzed(data);
-	searchSpotify(data.items);
-}
+	// console.log(data);
 
-function renderAnalyzed(data) {
+	// get and set title and total on the model
+	model.id = data.id;
+	model.total = data.totalItems;
+	model.title = data.title;
+	setTotal(model.total);
+	setTitle(model.title);
+
+	// Try to match all tracks with Spotify
 	for (var i = 0; i < data.items.length; i++) {
-		insert(data.items[i].video.title, $analyzed);
-		console.log('insert item');
-		updateCount();
+		index += 1;
+
+		// console.log(data[i]);
+		// renderAnalyzed(data[i]);
+		searchSpotify(data.items[i]);
 	}
+
+	console.log('index: ' + index);
+	console.log('length: ' + data.items.length);
+	console.log('no more items?');
+
+	// if (index < data.items.length - 1) {
+	// } else {
+	// 	console.log('what');
+	// }
+
+	// Continue searching YouTube (50 results limit)
+	start += apilimit;
+	index = 0;
+	loadPage();
 }
 
 // Search spotify
-function searchSpotify(items) {
-	// Filter words that Spotify would otherwise choke on
-	var name = items[index].video.title || [];
-	name = filterName(name);
+function searchSpotify(item) {
+	var name = item.video.title || [];
+	filteredName = filterName(name);
+	model.analyzed.push(name);
 
+	matchWithSpotify(filteredName);
+	// insert(data[i].video.title, $analyzed);
+}
+
+function matchWithSpotify(name) {
 	// Search for a matching track
 	$.get('http://ws.spotify.com/search/1/track.json?q=' + encodeURIComponent(name), function (e) {
-
-		// success
 		if (e.tracks && e.tracks[0]) {
-			//console.log('success: ', name, e);
-			matches.push(e.tracks[0]);
-			// console.log(e.tracks[0]);
-			// e.tracks[0].name
-			// e.tracks[0].artists[0].name
-			insert(name, $success);
-			insert(e.tracks[0].artists[0].name + ' - ' + e.tracks[0].name + '<small>(' + e.tracks[0].href + ')</small>', $matches);
-		// fail
+			// success
+			var track = e.tracks[0];
+			model.success.push(track);
+			insert(track.artists[0].name + ' - ' + track.name + '<small>(' + track.href + ')</small>', $success);
+			updateCount();
 		} else {
-			//console.log('fail: ', name, e);
-			insert(name, $failed);
-		}
-
-		// updateCount();
-
-		// recursive until there are no more items
-		if (index < items.length - 1) {
-			index += 1;
-			searchSpotify(items);
-
-		// Otherwise continue searching YouTube (50 results limit)
-		} else {
-			// console.log(matches);
-			start += apilimit;
-			index = 0;
-			loadPage();
+			// fail
+			model.failed.push(name);
+			// insert(name, $failed);
+			updateCount();
 		}
 	});
+
+	updateCount();
 }
 
 function updateCount() {
-	model.analyzed = $analyzed.find('li').length;
-	model.matched = $success.find('li').length;
-	model.failed = $failed.find('li').length;
-	model.progress = Math.round(model.analyzed / model.total * 100);
+	model.progress = Math.round(model.analyzed.length / model.total * 100);
+	// model.successPercentage = Math.round(model.success.length / model.analyzed * 100);
 	console.log(model.progress);
-	model.matchedPercentage = Math.round(model.matched / model.analyzed * 100);
+	// console.log(model.analyzed);
 
 	// animateValue('.js-analyzed', model.analyzed, 1000);
-	// animateValue('.js-matched', model.matched, 1000);
+	// animateValue('.js-success', model.success, 1000);
 	// animateValue('.js-failed', model.failed, 1000);
 
-	if (model.progress === 100) {
-		onDone();
-	}
+	// if (model.progress === 100) {
+	// 	onDone();
+	// }
 
-	$('.js-analyzed').text(model.analyzed);
-	$('.js-matched').text(model.matched);
-	$('.js-failed').text(model.failed);
+	// console.log('updateCount:' + model.success.length);
+
+	// $('.js-analyzed').text(model.analyzed);
+	$('.js-success').text(model.success.length);
+	$('.js-failed').text(model.failed.length);
 	$('.Progress').width(model.progress + '%');
 	$('.Progress-value').text(model.progress + '%');
 	// animateValue('.Progress-value', progress, 2000);
