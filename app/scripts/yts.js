@@ -1,20 +1,19 @@
-// based on: http://kmturley.blogspot.de/2014/01/converting-youtube-playlists-to-spotify.html
 // tunes: PL-tpclp_nA62tdgkqX1hcyKgH_DPp_RSi
 // instrumentals: PL6AEA53CDF028371E
 // https://gdata.youtube.com/feeds/api/playlists/PL07D6B14E58F50900?alt=jsonc&v=2&start-index=1&max-results=50
 
 var start = 1,
 	index = 0,
-	apilimit = 20,
+	apilimit = 50,
 
 	$analyzed = $('.Analyzed'),
 	$success = $('.Success'),
 	$failed = $('.Failed'),
 	$matches = $('.Matches'),
 
-	$form = $('.Playlist'),
-	$input = $('.Playlist-input'),
-	$submit = $('.Playlist-submit'),
+	$form = $('.PlaylistForm'),
+	$input = $('.PlaylistForm-input'),
+	$submit = $('.PlaylistForm-submit'),
 
 	$results = $('.Results'),
 
@@ -47,9 +46,17 @@ $input.on('focus keyup change', function (event) {
 $form.on('submit', function (event) {
 	event.preventDefault();
 	index = 0; // why?
-	model.success = []; // why?
 	model.id = $input.val();
 	loadPage();
+});
+
+$('.js-toggleFailed').on('click', function (event) {
+	event.preventDefault();
+	$('.Failed').toggle();
+});
+$('.js-toggleTitles').on('click', function (event) {
+	event.preventDefault();
+	$('.Bucket-results').toggleClass('is-showingTitles');
 });
 
 // Load a YouTube playlist
@@ -62,29 +69,32 @@ function loadPage(id) {
 	var urlAttributes = '?alt=jsonc&v=2&start-index=' + start + '&max-results=' + apilimit;
 	var request = $.get(url + urlAttributes, function (event) {
 		console.log('success');
+
 	}).done(function(event) {
-		console.log('second success');
+		// console.log('second success');
 		// console.log(event);
 
 		if (model.id !== event.data.id) {
-		 // new playlist
-		 clearTexts();
-		 clearResults();
+			// new playlist
+			clearTexts();
+			clearResults();
 		}
+
+		// onDone();
 
 		if (!event.data.items) {
 			console.log('no items');
-			// onDone();
+			$submit.text('Converting');
+
 		} else {
 			render(event.data);
 		}
+
 	}).fail(function(event) {
 		console.log('error');
 		onFail();
-	}).always(function(event) {
-		// console.log('ended');
-		onEnd();
-	});
+
+	}).always(function(event) {});
 }
 
 // note this is called several times while loading
@@ -104,10 +114,6 @@ function onFail() {
 	after();
 }
 
-function onEnd() {
-	// console.log('onEnd');
-}
-
 function onDone() {
 	$('.Progress-status').text('Analyzed');
 	$('.js-status').text('Converted');
@@ -122,15 +128,7 @@ function after() {
 }
 
 function render(data) {
-	// get and set values
-	// data.title
-	// data.items.length
-	// data.author
-	// data.description
-	// data.thumbnail.sq
-
 	$results.show();
-	// console.log(data);
 
 	// get and set title and total on the model
 	model.id = data.id;
@@ -143,19 +141,13 @@ function render(data) {
 	for (var i = 0; i < data.items.length; i++) {
 		index += 1;
 
-		// console.log(data[i]);
-		// renderAnalyzed(data[i]);
-		searchSpotify(data.items[i]);
+		var item = data.items[i];
+		var name = item.video.title;
+		// var name = item.video.title || [];
+		searchSpotify(name);
 	}
 
-	console.log('index: ' + index);
-	console.log('length: ' + data.items.length);
-	console.log('no more items?');
-
-	// if (index < data.items.length - 1) {
-	// } else {
-	// 	console.log('what');
-	// }
+	console.log('Done searching YouTube from ' + start);
 
 	// Continue searching YouTube (50 results limit)
 	start += apilimit;
@@ -163,32 +155,36 @@ function render(data) {
 	loadPage();
 }
 
-// Search spotify
-function searchSpotify(item) {
-	var name = item.video.title || [];
-	filteredName = filterName(name);
-	model.analyzed.push(name);
+// Search for a matching track
+function searchSpotify(name) {
+	var filteredName = filterName(name);
 
-	matchWithSpotify(filteredName);
-	// insert(data[i].video.title, $analyzed);
+	var url = 'http://ws.spotify.com/search/1/track.json?q=' + encodeURIComponent(filteredName);
+	var request = $.get(url, function (event) {
+		console.log('spotify started');
+
+	}).done(function(event) {
+		// console.log('spotify: done');
+		model.analyzed.push(name);
+		matchTrack(filteredName, event.tracks[0]);
+
+	}).fail(function(event) {
+		console.log('spotify: fail');
+
+	}).always(function(event) {
+		// console.log('spotify: always');
+	});
 }
 
-function matchWithSpotify(name) {
-	// Search for a matching track
-	$.get('http://ws.spotify.com/search/1/track.json?q=' + encodeURIComponent(name), function (e) {
-		if (e.tracks && e.tracks[0]) {
-			// success
-			var track = e.tracks[0];
-			model.success.push(track);
-			insert(track.artists[0].name + ' - ' + track.name + '<small>(' + track.href + ')</small>', $success);
-			updateCount();
-		} else {
-			// fail
-			model.failed.push(name);
-			// insert(name, $failed);
-			updateCount();
-		}
-	});
+function matchTrack(name, track) {
+	if (track) {
+		model.success.push(track);
+		// insert(track.artists[0].name + ' - ' + track.name + '<small>(' + track.href + ')</small>', $success);
+		insert(track.href + '<small>(' + track.artists[0].name + ' - ' + track.name + ')</small>', $success);
+	} else {
+		model.failed.push(name);
+		insert(name, $failed);
+	}
 
 	updateCount();
 }
@@ -196,16 +192,18 @@ function matchWithSpotify(name) {
 function updateCount() {
 	model.progress = Math.round(model.analyzed.length / model.total * 100);
 	// model.successPercentage = Math.round(model.success.length / model.analyzed * 100);
-	console.log(model.progress);
-	// console.log(model.analyzed);
+
+	// console.log('Analyzed ' + model.analyzed.length + '/' + model.total);
+	// console.log('Analyzed ' + model.analyzed + '/' + model.total);
 
 	// animateValue('.js-analyzed', model.analyzed, 1000);
 	// animateValue('.js-success', model.success, 1000);
 	// animateValue('.js-failed', model.failed, 1000);
 
-	// if (model.progress === 100) {
-	// 	onDone();
-	// }
+	// DONE!!
+	if (model.progress === 100) {
+		onDone();
+	}
 
 	// console.log('updateCount:' + model.success.length);
 
@@ -258,6 +256,7 @@ function filterName(name) {
 	.replace(/720p/ig, '')
 	.replace(/1080p/ig, '')
 	.replace(/version/ig, '')
+	.replace(/wmv/ig, '')
 	.replace(/7''/ig, '');
 
 	return name;
