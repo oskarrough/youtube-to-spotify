@@ -17,14 +17,14 @@ var start = 1,
 	$input = $('.Playlist-input'),
 	$submit = $('.Playlist-submit'),
 
-	$results = $('.Results').hide(),
+	$results = $('.Results'),
 
 	$error = $('.js-error'),
 	$total = $('.js-total'),
 	$title = $('.js-title');
 
 var model = {
-	 id: null,
+	id: null,
 	title: '',
 	total: 0,
 	analyzed: 0,
@@ -261,35 +261,4 @@ function showSubmit() {
 
 function hideSubmit() {
 	$submit.removeClass('is-visible');
-}
-
-function animateValue(id, end, duration) {
-	var obj = $(id)[0];
-	var start = $(obj).text();
-	var range = end - start;
-	// no timer shorter than 50ms (not really visible any way)
-	var minTimer = 50;
-	// calc step time to show all interediate values
-	var stepTime = Math.abs(Math.floor(duration / range));
-
-	// never go below minTimer
-	stepTime = Math.max(stepTime, minTimer);
-
-	// get current time and calculate desired end time
-	var startTime = new Date().getTime();
-	var endTime = startTime + duration;
-	var timer;
-
-	function run() {
-		var now = new Date().getTime();
-		var remaining = Math.max((endTime - now) / duration, 0);
-		var value = Math.round(end - (remaining * range));
-		obj.innerHTML = value;
-		if (value == end) {
-			clearInterval(timer);
-		}
-	}
-
-	timer = setInterval(run, stepTime);
-	run();
 }
