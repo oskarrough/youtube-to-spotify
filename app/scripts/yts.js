@@ -5,7 +5,6 @@
 
 var start = 1,
 	index = 0,
-	matches = [],
 	apilimit = 20,
 
 	$analyzed = $('.Analyzed'),
@@ -105,12 +104,6 @@ function before() {
 	$('body').removeClass('is-failed').removeClass('is-done').addClass('is-loading');
 }
 
-function after() {
-	console.log('after');
-	$submit.text('Convert').removeAttr('disabled');
-	$('body').addClass('is-done').removeClass('is-loading');
-}
-
 function onFail() {
 	$('body').addClass('is-failed');
 	$('.Results').hide();
@@ -129,12 +122,10 @@ function onDone() {
 	after();
 }
 
-function clearTexts() {
-	$('.js-error').text('');
-}
-
-function clearResults() {
-	$('.Bucket').find('li').remove();
+function after() {
+	console.log('after');
+	$submit.text('Convert').removeAttr('disabled');
+	$('body').addClass('is-done').removeClass('is-loading');
 }
 
 function render(data) {
@@ -199,10 +190,6 @@ function searchSpotify(items) {
 	});
 }
 
-function insert(item, container) {
-	container.find('.Bucket-results').append('<li>'+ item +'</li>');
-}
-
 function updateCount() {
 	model.analyzed = $analyzed.find('li').length;
 	model.matched = $success.find('li').length;
@@ -227,6 +214,18 @@ function updateCount() {
 	// animateValue('.Progress-value', progress, 2000);
 }
 
+function insert(item, container) {
+	container.find('.Bucket-results').append('<li>'+ item +'</li>');
+}
+
+function clearTexts() {
+	$('.js-error').text('');
+}
+
+function clearResults() {
+	$('.Bucket').find('li').remove();
+}
+
 function setError(msg) {
 	$error.text(msg);
 }
@@ -234,9 +233,15 @@ function setTotal(msg) {
 	$total.text(msg);
 }
 function setTitle(msg) {
-	if ($title.text() === '') {
-		$title.text(msg);
-	}
+	$title.text(msg);
+}
+
+function showSubmit() {
+	$submit.addClass('is-visible');
+}
+
+function hideSubmit() {
+	$submit.removeClass('is-visible');
 }
 
 // would be nice to also filter out all years except 1999
@@ -253,12 +258,4 @@ function filterName(name) {
 	.replace(/7''/ig, '');
 
 	return name;
-}
-
-function showSubmit() {
-	$submit.addClass('is-visible');
-}
-
-function hideSubmit() {
-	$submit.removeClass('is-visible');
 }
