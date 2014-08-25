@@ -34,10 +34,13 @@
 		<p class="js-error"></p>
 
 		<div class="Results">
-			<p><span class="js-status">Converted</span> <span class="js-success"></span> of <span class="js-total"></span> <span>tracks from</span> <strong><span class="js-title"></span></strong>. <span class="js-failed"></span> not found.</p>
+			<p><span class="js-status">Converted</span> <span class="js-success"></span> of <span class="js-total"></span> <span>tracks from</span> <strong><span class="js-title"></span></strong>.<br>
+			<span class="js-failed"></span> not found <button class="js-toggleFailed">(show)</button></p>
 
 			<div class="Bucket Success">
+				<h2>Your new Spotify playlist</h2>
 				<p>Copy and paste these directly into a Spotify playlist</p>
+				<!-- <button class="js-toggleTitles">Toggle titles</button> -->
 				<div class="Bucket-results" contenteditable></div>
 			</div>
 			<div class="Bucket Analyzed">
@@ -45,7 +48,8 @@
 				<div class="Bucket-results"></div>
 			</div>
 			<div class="Bucket Failed">
-				<h2>Fail</h2>
+				<h2>Couldn't find these on Spotify</h2>
+				<p>The machine cleans the weird titles from common words but these couldn't be found, sorry.</p>
 				<div class="Bucket-results"></div>
 			</div>
 		</div>

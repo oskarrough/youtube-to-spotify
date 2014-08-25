@@ -32,12 +32,58 @@ footer {
 		max-width: 40em;
 	}
 }
+
+// highlight numbers
+.js-success,
+.js-total,
+.js-failed {}
+
+.js-toggleTitles {
+	float: right;
+	margin: 1em;
+}
+
+/**
+ * Buckets
+ */
 .Bucket {
 	margin: 2em 0;
+	h2 {
+		display: inline-block;
+		padding: 0.45em 0.5em 0.35em;
+	}
+}
+.Bucket-results {
+	li {
+		list-style: none;
+		font-size: 12px;
+		padding: 0.5em;
+		&:nth-child(even) {
+		  background: hsla(0, 0%, 97%, 0.1);
+		}
+	}
+	small {
+		display: none;
+		float: right;
+		font-size: 10px;
+		opacity: .6;
+	}
+	&.is-showingTitles small {
+		display: block;
+	}
+}
+.Success {
+	clear: both;
 	border-radius: 5px;
 	border: 1px solid hsla(0, 0%, 0%, 0.2);
+	background-color: $green;
+	color: #fff;
 
-	> p {
+	h2 {
+		background-color: $text-color;
+	}
+
+	> p:first-child {
 		font-size: 14px;
 		display: inline-block;
 		font-weight: bold;
@@ -46,32 +92,6 @@ footer {
 		padding: 0.2em 0.5em;
 	}
 
-	ul {}
-	li {
-		list-style: none;
-		font-size: 12px;
-		padding: 0.5em;
-	}
-	li:nth-child(even) {
-	  background: hsla(0, 0%, 97%, 0.1);
-	}
-	small {
-		display: none;
-		float: right;
-		font-size: 10px;
-		opacity: .6;
-		@media (min-width: 600px) {
-			display: block;
-		}
-	}
-}
-.Bucket-results {
-	margin: 1em;
-}
-.Success {
-	clear: both;
-	background-color: $green;
-	color: #fff;
 	.Bucket-results:focus {
 		background-color: hsla(60, 100%, 50%, 0.22);
 		outline: 0;
@@ -83,6 +103,7 @@ footer {
 .Failed {
 	display: none;
 	h2 {
-		color: red;
+		color: white;
+		background-color: $red;
 	}
 }
