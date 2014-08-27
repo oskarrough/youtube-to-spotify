@@ -37,7 +37,6 @@ footer {
 .js-success,
 .js-total,
 .js-failed {}
-
 .js-toggleTitles {
 	float: right;
 	margin: 1em;
@@ -50,7 +49,13 @@ footer {
 	margin: 2em 0;
 	h2 {
 		display: inline-block;
-		padding: 0.45em 0.5em 0.35em;
+		padding: 0.4em 0.5em 0.2em;
+		margin-bottom: 0.5em;
+
+		// + p {
+		// 	font-size: 14px;
+		// 	margin-left: 0.5em;
+		// }
 	}
 }
 .Bucket-results {
@@ -73,28 +78,27 @@ footer {
 	}
 }
 .Success {
-	clear: both;
-	border-radius: 5px;
-	border: 1px solid hsla(0, 0%, 0%, 0.2);
-	background-color: $green;
+	max-width: 26em;
+	border: 1px solid hsl(0, 0%, 60%);
+	border-radius: 4px;
+	background-color: $text-color;
 	color: #fff;
 
 	h2 {
-		background-color: $text-color;
+		background-color: $green;
+		color: #fff;
+		+ p {
+			font-size: 12px;
+			margin-left: em(8,12);
+		}
 	}
-
-	> p:first-child {
-		font-size: 14px;
-		display: inline-block;
-		font-weight: bold;
-		background-color: $yellow;
-		color: $text-color;
-		padding: 0.2em 0.5em;
-	}
-
-	.Bucket-results:focus {
-		background-color: hsla(60, 100%, 50%, 0.22);
-		outline: 0;
+	.Bucket-results {
+		max-height: 392px; // middle of a word
+		overflow: scroll;
+		&:focus {
+			background-color: hsla(60, 100%, 50%, 0.22);
+			outline: 0;
+		}
 	}
 }
 .Analyzed {

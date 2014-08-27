@@ -38,3 +38,21 @@ button:disabled,
 button.is-disabled {
 	cursor: default;
 }
+
+// Reset button styles
+.Button--clean,
+.js-toggleFailed {
+	display: inline;
+	background: none;
+	border: 0;
+	padding: 0;
+	font-weight: normal;
+	color: inherit;
+	text-decoration: underline;
+	button:hover,
+	button:focus,
+	button:active {
+		background-color: none;
+		text-decoration: underline;
+	}
+}

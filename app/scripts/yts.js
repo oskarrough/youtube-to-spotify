@@ -3,8 +3,8 @@
 // https://gdata.youtube.com/feeds/api/playlists/PL07D6B14E58F50900?alt=jsonc&v=2&start-index=1&max-results=50
 
 var start = 1,
-	index = 0,
 	apilimit = 50,
+	isWaiting = false,
 
 	$analyzed = $('.Analyzed'),
 	$success = $('.Success'),
@@ -25,16 +25,15 @@ var model = {
 	id: null,
 	title: '',
 	total: 0,
-
+	progress: 0,
 	analyzed: [],
 	success: [],
-	failed: [],
-
-	progress: 0,
-	successPercentage: 0
+	failed: []
 };
 
-// Toggle the button depending on the input
+/**
+ * Toggle the button depending on the input
+ */
 $input.on('focus keyup change', function (event) {
 	if (this.value !== '') {
 		showSubmit();
@@ -43,17 +42,49 @@ $input.on('focus keyup change', function (event) {
 	}
 });
 
+/**
+ * Reset and then start the converting!
+ */
 $form.on('submit', function (event) {
 	event.preventDefault();
-	index = 0; // why?
 	model.id = $input.val();
-	loadPage();
+	init();
 });
 
+// @todo: should be a new model so this wouldn't be necessary
+function resetModel() {
+	model.title = '';
+	model.total = 0;
+	model.progress = 0;
+	model.analyzed = [];
+	model.success = [];
+	model.failed = [];
+}
+
+function init() {
+	console.log('init');
+	resetModel();
+	loadPage();
+}
+
+/**
+ * Show failed tracks if not already visible and always scroll to them
+ */
+var failedIsVisible = false;
 $('.js-toggleFailed').on('click', function (event) {
 	event.preventDefault();
-	$('.Failed').toggle();
+
+	if (!failedIsVisible) {
+		$('#Failed').slideDown(500);
+	}
+	$('html, body').animate({
+		scrollTop: $('#Failed').offset().top
+	}, 400);
 });
+
+/**
+ * Toggle titles on converted tracks (otherwise only the spotify url)
+ */
 $('.js-toggleTitles').on('click', function (event) {
 	event.preventDefault();
 	$('.Bucket-results').toggleClass('is-showingTitles');
@@ -71,20 +102,21 @@ function loadPage(id) {
 		console.log('success');
 
 	}).done(function(event) {
-		// console.log('second success');
-		// console.log(event);
 
 		if (model.id !== event.data.id) {
-			// new playlist
+			console.log('new playlist?');
 			clearTexts();
 			clearResults();
 		}
 
-		// onDone();
-
 		if (!event.data.items) {
 			console.log('no items');
 			$submit.text('Converting');
+
+			if (isWaiting) {
+				console.log('no items and is waiting');
+				onDone();
+			}
 
 		} else {
 			render(event.data);
@@ -139,8 +171,6 @@ function render(data) {
 
 	// Try to match all tracks with Spotify
 	for (var i = 0; i < data.items.length; i++) {
-		index += 1;
-
 		var item = data.items[i];
 		var name = item.video.title;
 		// var name = item.video.title || [];
@@ -151,7 +181,6 @@ function render(data) {
 
 	// Continue searching YouTube (50 results limit)
 	start += apilimit;
-	index = 0;
 	loadPage();
 }
 
@@ -189,9 +218,10 @@ function matchTrack(name, track) {
 	updateCount();
 }
 
+
+
 function updateCount() {
 	model.progress = Math.round(model.analyzed.length / model.total * 100);
-	// model.successPercentage = Math.round(model.success.length / model.analyzed * 100);
 
 	// console.log('Analyzed ' + model.analyzed.length + '/' + model.total);
 	// console.log('Analyzed ' + model.analyzed + '/' + model.total);
@@ -216,7 +246,7 @@ function updateCount() {
 }
 
 function insert(item, container) {
-	container.find('.Bucket-results').append('<li>'+ item +'</li>');
+	container.find('.Bucket-results').prepend('<li>'+ item +'</li>');
 }
 
 function clearTexts() {

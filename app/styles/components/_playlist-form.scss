@@ -29,29 +29,29 @@ $form-height: 34px;
 		// background-color: hsl(60, 100%, 50%);
 		// color: #000;
 	}
-	@media (min-width: $layout-s) {
-		&.is-visible:before {
-			display: block;
-		}
-	}
-	&:before {
-		content: '';
-		display: none;
-		width: 4px;
-		height: 0;
-		position: fixed;
-		top: 100%;
-		left: 80%;
-		z-index: 2;
-		transition: height 500ms ease-out;
-		background-color: $green;
-		.is-done & {
-			height: 130px;
-		}
-		.is-failed & {
-			height: 0;
-		}
-	}
+	// @media (min-width: $layout-s) {
+	// 	&.is-visible:before {
+	// 		display: block;
+	// 	}
+	// }
+	// &:before {
+	// 	content: '';
+	// 	display: none;
+	// 	width: 4px;
+	// 	height: 0;
+	// 	position: fixed;
+	// 	top: 100%;
+	// 	left: 80%;
+	// 	z-index: 2;
+	// 	transition: height 500ms ease-out;
+	// 	background-color: $green;
+	// 	.is-done & {
+	// 		height: 130px;
+	// 	}
+	// 	.is-failed & {
+	// 		height: 0;
+	// 	}
+	// }
 }
 
 .Progress {
@@ -84,5 +84,5 @@ $form-height: 34px;
 	background-size: 100%;
 	margin: 1px;
 	padding: 6px 0.6em;
-	border-radius: 5px;
+	border-radius: 4px;
 }
