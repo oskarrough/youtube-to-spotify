@@ -1,3 +1,4 @@
+/*global Ember, DS*/
 /**
  * Start and namespace the Ember application
  */
