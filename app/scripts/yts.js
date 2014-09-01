@@ -16,7 +16,6 @@ var start = 1,
 	$submit = $('.PlaylistForm-submit'),
 
 	$results = $('.Results'),
-
 	$error = $('.js-error'),
 	$total = $('.js-total'),
 	$title = $('.js-title');
@@ -295,7 +294,8 @@ function filterName(name) {
 	.replace(/1080p/ig, '')
 	.replace(/version/ig, '')
 	.replace(/wmv/ig, '')
-	.replace(/7''/ig, '');
+	.replace(/7''/ig, '')
+	.replace(/12''/ig, '');
 
 	return name;
 }
