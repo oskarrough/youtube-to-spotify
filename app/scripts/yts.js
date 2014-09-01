@@ -180,8 +180,16 @@ function render(data) {
 	console.log('Done searching YouTube from ' + start);
 
 	// Continue searching YouTube (50 results limit)
+
+	// @TODO don't load again if max will be over 1000
+	// https://gdata.youtube.com/feeds/api/playlists/FLU3lRXQYD3O5Z3VUj5U_tUQ?alt=jsonc&v=2&start-index=1001&max-results=50
+
 	start += apilimit;
-	loadPage();
+	if (start < 1000) {
+		loadPage();
+	} else {
+		console.log('youtube 1000 limit reached');
+	}
 }
 
 // Search for a matching track
@@ -217,8 +225,6 @@ function matchTrack(name, track) {
 
 	updateCount();
 }
-
-
 
 function updateCount() {
 	model.progress = Math.round(model.analyzed.length / model.total * 100);
@@ -260,9 +266,11 @@ function clearResults() {
 function setError(msg) {
 	$error.text(msg);
 }
+
 function setTotal(msg) {
 	$total.text(msg);
 }
+
 function setTitle(msg) {
 	$title.text(msg);
 }
