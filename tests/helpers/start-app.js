@@ -1,6 +1,8 @@
+/* global require */
+
+var Application = require('yts/app')['default'];
+var Router = require('yts/router')['default'];
 import Ember from 'ember';
-import Application from 'yts/app';
-import Router from 'yts/router';
 
 export default function startApp(attrs) {
   var App;

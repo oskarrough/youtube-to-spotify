@@ -34,7 +34,6 @@
     "fillIn",
     "click",
     "keyEvent",
-    "triggerEvent",
     "find",
     "findWithAssert",
     "wait",

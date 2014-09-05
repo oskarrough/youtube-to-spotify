@@ -13,13 +13,11 @@
     <link rel="stylesheet" href="assets/yts.css">
   </head>
   <body>
-    <script>
-      window.YtsENV = {{ENV}};
-      window.EmberENV = window.YtsENV.EmberENV;
-    </script>
     <script src="assets/vendor.js"></script>
     <script src="assets/yts.js"></script>
     <script>
+      window.YtsENV = require('yts/config/environment')['default'];
+      window.EmberENV = window.YtsENV.EmberENV;
       window.Yts = require('yts/app')['default'].create(YtsENV.APP);
     </script>
   </body>
