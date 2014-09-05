@@ -1,3 +1,16 @@
+html {
+	font-family: 'Patron', 'maison neue';
+}
 html, body {
   margin: 20px;
+}
+
+ul {
+	padding-left: 0;
+}
+li {
+	font-size: 12px;
+}
+li img {
+	width: 3em;
 }
