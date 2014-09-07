@@ -2,8 +2,8 @@ import Ember from 'ember';
 
 export default Ember.Route.extend({
 	actions: {
-		go: function() {
-			var id = this.controllerFor('application').get('playlistID');
+		convertPlaylist: function() {
+			var id = this.controllerFor('index').get('playlist');
 			this.transitionTo('playlist', id);
 		}
 	}

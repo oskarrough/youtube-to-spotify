@@ -1,0 +1,34 @@
+html,
+input {
+	font-family: arial;
+}
+html {
+	font-size: 16px;
+	line-height: 1.3;
+}
+body {
+  margin: 1rem;
+}
+h1,h2,h3,p,ul,form {
+	margin: 0 0 1rem;
+}
+h1,
+h2 {
+	font-size: 20px;
+}
+p,
+input {
+	font-size: 14px;
+}
+.Logo {}
+.List {
+	padding-left: 0;
+	list-style: none;
+	li {
+		font-size: 0.8125rem;
+		padding: 0.25em 0 0.2em;
+	}
+	li:nth-child(odd) {
+		background-color: hsl(0,0%,97%);
+	}
+}

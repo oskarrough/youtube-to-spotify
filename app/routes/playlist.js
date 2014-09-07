@@ -1,15 +1,28 @@
 import Ember from 'ember';
 
 export default Ember.Route.extend({
-	model: function(params) {
-		var self = this;
-		var url = 'https://gdata.youtube.com/feeds/api/playlists/'+ params.playlist_id +'?alt=jsonc&v=2&start-index=1&max-results=50';
 
-		return Ember.$.getJSON(url).then(function(data) {
-			console.log(data.data);
-			return data.data;
-		}).fail(function(){
-			self.transitionTo('playlist/not-found');
-		});
+	// Get correct endpoint URL
+	endpoint: function(id) {
+		return 'https://gdata.youtube.com/feeds/api/playlists/'+ id +'?alt=jsonc&v=2&start-index=1&max-results=50';
+	},
+	// beforeModel: function() {
+	// },
+	model: function(params) {
+		return Ember.$.getJSON( this.endpoint(params.playlist_id) )
+			.then(function(response) {
+				// response.data.items.map(function (item) {
+				// 	return App.PlaylistItem.create(item.data);
+				// });
+				return response.data;
+			})
+			.fail(function(){
+				console.log('fail');
+			});
+	},
+	actions: {
+		error: function(error, transition) {
+			return this.transitionTo('application');
+		}
 	}
 });
