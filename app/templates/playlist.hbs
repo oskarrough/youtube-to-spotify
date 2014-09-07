@@ -1,0 +1,16 @@
+<div class="Playlist">
+	<p><strong>{{title}}</strong><br>{{description}} - by <em>{{author}}</em></p>
+	<p>{{status}} {{items.length}} of {{totalItems}} songs.</p
+	{{!-- <img {{bind-attr src=thumbnail.sqDefault}} alt=""> --}}
+</div>
+
+<button {{action 'convert'}}>Convert</button>
+
+<ul>
+	{{#each items}}
+		<li>
+			{{!-- <img {{bind-attr src=video.thumbnail.sqDefault}} alt=""> --}}
+			{{video.title}}
+		</li>
+	{{/each}}
+</ul>

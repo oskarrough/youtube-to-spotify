@@ -1,10 +1,10 @@
 html {
-	font-family: 'Patron', 'maison neue';
+	font-family: arial;
+	font-size: 14px;
 }
-html, body {
-  margin: 20px;
+body {
+  margin: 10px;
 }
-
 ul {
 	padding-left: 0;
 }
@@ -13,4 +13,7 @@ li {
 }
 li img {
 	width: 3em;
+}
+h1:first-of-type {
+	font-size: 1rem;
 }

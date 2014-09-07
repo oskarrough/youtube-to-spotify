@@ -1,9 +1,6 @@
-import {
-  moduleFor,
-  test
-} from 'ember-qunit';
+import { test, moduleFor } from 'ember-qunit';
 
-moduleFor('controller:array', 'ArrayController', {
+moduleFor('controller:playlist', 'PlaylistController', {
   // Specify the other units that are required for this test.
   // needs: ['controller:foo']
 });
