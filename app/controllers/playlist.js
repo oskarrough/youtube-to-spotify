@@ -40,7 +40,6 @@ export default Ember.ObjectController.extend({
 				self.incrementProperty('endpointIndex', 50);
 				self.get('model.items').pushObjects(response.data.items);
 				self.findAll();
-
 			} else {
 				self.toggleProperty('isDoneLoading');
 				self.set('isLoading', false);
