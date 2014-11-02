@@ -1,28 +1,60 @@
 import Ember from 'ember';
 
 export default Ember.Route.extend({
-
-	// Get correct endpoint URL
-	endpoint: function(id) {
-		return 'https://gdata.youtube.com/feeds/api/playlists/'+ id +'?alt=jsonc&v=2&start-index=1&max-results=50';
-	},
-	// beforeModel: function() {
-	// },
 	model: function(params) {
-		return Ember.$.getJSON( this.endpoint(params.playlist_id) )
-			.then(function(response) {
-				// response.data.items.map(function (item) {
-				// 	return App.PlaylistItem.create(item.data);
-				// });
-				return response.data;
-			})
-			.fail(function(){
-				console.log('fail');
+		var playlist = Ember.Object.create();
+
+		this.set('index', 1);
+		this.set('id', params.playlist_id);
+
+		return Ember.$.getJSON(this.get('endpoint')).then(function(response) {
+			console.log(response.data);
+
+			// author, totalItems, itemsPerPage
+
+			playlist.setProperties({
+				'id': params.playlist_id,
+				'title': response.data.title,
+				'description': response.data.description,
+				'thumbnail': response.data.thumbnail,
+				'items': response.data.items
 			});
+
+			// response.data.items.map(function (item) {
+			// 	return App.PlaylistItem.create(item.data);
+			// });
+
+			return playlist;
+		})
+		.fail(function() {
+			console.log('fail');
+		});
 	},
-	actions: {
-		error: function(error, transition) {
-			return this.transitionTo('application');
-		}
+
+	// Set endpoint based on ID and current endpoint index
+	endpoint: function() {
+		return 'https://gdata.youtube.com/feeds/api/playlists/'+ this.get('id') +'?alt=jsonc&v=2&start-index='+ this.get('index') +'&max-results=50';
+	}.property('index', 'id'),
+
+	// Recursively find all items in a playlist
+	afterModel: function(model) {
+		this.loadItems(model);
+	},
+
+	// Loads more items depending on global index and max-results in endpoint()
+	loadItems: function(model) {
+		this.incrementProperty('index', 50);
+		console.log('loadItems' + this.get('index'));
+		Ember.$.getJSON(this.get('endpoint')).then(function(response) {
+			var items = response.data.items;
+			if (items) {
+				model.get('items').pushObjects(items);
+				this.loadItems(model);
+			} else {
+				// reset
+				this.set('index', 1);
+				return false;
+			}
+		}.bind(this));
 	}
 });

@@ -11,29 +11,6 @@ export default Ember.ObjectController.extend({
 		}
 	},
 
-	// Set endpoint based on ID and current endpoint index
-	endpoint: function() {
-		return 'https://gdata.youtube.com/feeds/api/playlists/'+ this.get('model.id') +'?alt=jsonc&v=2&start-index='+ this.get('index') +'&max-results=50';
-	}.property('index'),
-
-	// Recursively find all items in a playlist
-	findAll: function() {
-		this.incrementProperty('index', 50);
-		this.set('isLoading', true);
-		var self = this;
-		console.log('findAll' + this.get('index'));
-		Ember.$.getJSON(this.get('endpoint')).then(function(response) {
-			if (response.data.items) {
-				self.get('model.items').pushObjects(response.data.items);
-				self.findAll();
-			} else {
-				self.set('isLoading', false);
-				self.set('index', 1); // reset
-				return false;
-			}
-		});
-	}.observes('model'),
-
 	// Match the items with Spotify
 	startConversion: function() {
 		var self = this;

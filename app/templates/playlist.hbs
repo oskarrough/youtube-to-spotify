@@ -1,15 +1,7 @@
 <article class="Playlist">
-	<h2>{{title}}</h2>
+	<h1>{{title}}</h1>
 	<p class="Playlist-description">{{description}} - <em>by {{author}}</em></p>
-
-	<p><button {{action 'convert'}}>Convert</button> these {{items.length}} (of {{totalItems}}) songs.</p>
-
-	<ul class="List">
-		{{#each items}}
-			<li>
-				{{!-- <img {{bind-attr src=video.thumbnail.sqDefault}} alt=""> --}}
-				{{video.title}}
-			</li>
-		{{/each}}
-	</ul>
+	<p><button {{action 'convert'}}>Convert these {{items.length}} songs</button></p>
+	<hr>
+	{{outlet}}
 </article>
