@@ -45,7 +45,7 @@ export default Ember.ObjectController.extend({
 	},
 
 	matchItem: function(item) {
-		var id = item.id;
+		// var id = item.id;
 		// var image = item.video.thumbnail.sqDefault;
 		var title = item.video.title;
 		var titleFiltered = this.filterTitle(title);

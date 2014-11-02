@@ -1,12 +1,12 @@
 import Ember from 'ember';
+import config from './config/environment';
 
 var Router = Ember.Router.extend({
-  location: YtsENV.locationType
+	location: config.locationType
 });
 
 Router.map(function() {
 	this.resource('playlist', { path: '/playlist/:playlist_id' });
-	// this.resource('error');
 });
 
 export default Router;

@@ -7,18 +7,15 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    {{BASE_TAG}}
+    {{content-for 'head'}}
 
     <link rel="stylesheet" href="assets/vendor.css">
     <link rel="stylesheet" href="assets/yts.css">
   </head>
   <body>
+    {{content-for 'body'}}
+
     <script src="assets/vendor.js"></script>
     <script src="assets/yts.js"></script>
-    <script>
-      window.YtsENV = require('yts/config/environment')['default'];
-      window.EmberENV = window.YtsENV.EmberENV;
-      window.Yts = require('yts/app')['default'].create(YtsENV.APP);
-    </script>
   </body>
 </html>
