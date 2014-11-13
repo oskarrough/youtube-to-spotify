@@ -7,7 +7,7 @@ export default Ember.ArrayController.extend({
 		return this.filterBy('isMatched', true);
 	}.property('this.@each.isMatched'),
 
-	// returns the filtered channels if we are searching,
+	// returns the filtered channels if showMatched is true
 	// otherwise the default array
 	items: function() {
 		return this.get('showMatched') ? this.get('matchedItems') : this;
