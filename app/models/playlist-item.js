@@ -1,8 +1,9 @@
 import DS from 'ember-data';
 
 export default DS.Model.extend({
-	id: DS.attr('string'),
-	name: DS.attr('string'),
-	matched: DS.attr('boolean', { defaultValue: false }),
+	title: DS.attr('string'),
+	spotifyTitle: DS.attr('string'),
+	thumbnail: DS.attr('string'),
+	isMatched: DS.attr('boolean'),
 	playlist: DS.belongsTo('playlist')
 });

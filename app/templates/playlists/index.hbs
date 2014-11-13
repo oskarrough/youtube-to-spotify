@@ -1,0 +1,17 @@
+<p>
+	<label>
+		{{input type="checkbox" checked=showMatched}} Only show the {{matched.length}} matched items
+	</label>
+</p>
+
+<hr>
+
+<ul class="List">
+{{#each items}}
+	<li {{bind-attr class="isMatched"}}>
+		{{title}}
+		{{!-- <img {{bind-attr src=thumbnail alt=title}}> --}}
+	</li>
+{{/each}}
+</ul>
+

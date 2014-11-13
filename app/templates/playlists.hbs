@@ -1,7 +1,9 @@
 <article class="Playlist">
-	<h1>{{title}}</h1>
+
+	<h1 class="Playlist-title">{{title}}</h1>
 	<p class="Playlist-description">{{description}} - <em>by {{author}}</em></p>
 	<p><button {{action 'convert'}}>Convert these {{items.length}} songs</button></p>
-	<hr>
+
 	{{outlet}}
+
 </article>

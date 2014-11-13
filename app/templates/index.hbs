@@ -1,9 +1,8 @@
 <p>Enter a YouTube playlist below to find the tracks on Spotify.</p>
 
-<form>
-	{{!-- {{input placeholder='YouTube playlist ID or URL' value=playlistID}} --}}
+<form {{action 'convertPlaylist' on='submit'}}>
 	{{input placeholder='PL6E85066B4FD25598' value=playlist}}
-	<button {{action 'convertPlaylist'}}>Convert</button>
+	<button type="input">Convert</button>
 </form>
 
 <p><small>To test, you can try this id: PL6E85066B4FD25598</small></p>

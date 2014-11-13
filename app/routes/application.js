@@ -5,7 +5,7 @@ export default Ember.Route.extend({
 		convertPlaylist: function() {
 			var id = this.controllerFor('index').get('playlist');
 			console.log(id);
-			this.transitionTo('playlist', id);
+			this.transitionTo('playlists', id);
 		}
 	}
 });

@@ -21,13 +21,22 @@ p,
 input {
 	font-size: 14px;
 }
-.Logo {}
+.Logo {
+	a {
+		color: black;
+		text-decoration: none;
+	}
+}
 .List {
 	padding-left: 0;
 	list-style: none;
 	li {
 		font-size: 0.8125rem;
 		padding: 0.25em 0 0.2em;
+		&.is-matched {
+			// text-decoration: line-through;
+			font-weight: bold;
+		}
 	}
 	li:nth-child(odd) {
 		background-color: hsl(0,0%,97%);
@@ -41,4 +50,11 @@ button {
 	background: hsl(0, 100%, 100%);
 	border: 1px solid hsl(0, 0%, 70%);
 	background-image: linear-gradient(to bottom, hsl(0, 100%, 100%) 50%, hsl(0, 0%, 90%));
+}
+
+
+.Playlist-title {
+	background-color: yellow;
+	display: inline-block;
+	padding: 0.4em 0.5em 0.1em;
 }
