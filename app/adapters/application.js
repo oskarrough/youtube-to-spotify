@@ -1,4 +1,5 @@
 import DS from 'ember-data';
 
-export default DS.Fixture.extend({
+export default DS.LSAdapter.extend({
+	namespace: 'yts'
 });
