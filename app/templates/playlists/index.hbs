@@ -1,6 +1,9 @@
 <p>
-	<label>
-		{{input type="checkbox" checked=showMatched}} Only show the {{matched.length}} matched items
+	<label class="Playlist-matched">
+		{{input type="checkbox" checked=showMatched}}
+		<span id="AnimatedNumber" class="AnimatedNumber">
+			{{liquid-bind matched.length}} matched
+		</span>
 	</label>
 </p>
 

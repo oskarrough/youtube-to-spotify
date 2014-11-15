@@ -57,4 +57,15 @@ button {
 	background-color: yellow;
 	display: inline-block;
 	padding: 0.4em 0.5em 0.1em;
+.AnimatedNumber {
+	text-align: center;
+	.liquid-outlet,
+	.liquid-container {
+		display: inline-block;
+		vertical-align: top;
+	}
+	.liquid-child {
+		// This prevents a slight horizontal wobble in firefox
+		width: 1.5em;
+	}
 }

@@ -4,6 +4,7 @@
 	<p class="Playlist-description">{{description}} - <em>by {{author}}</em></p>
 	<p><button {{action 'convert'}}>Convert these {{items.length}} songs</button></p>
 
-	{{outlet}}
+	<p><button {{bind-attr disabled=isMatching}} {{action 'match'}}>Search <span class="AnimatedNumber">{{liquid-bind items.length}}</span> songs</button></p>
 
+	{{outlet}}
 </article>

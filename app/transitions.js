@@ -1,0 +1,14 @@
+export default function(){
+  // this.transition(
+  //   this.fromRoute('people.index'),
+  //   this.toRoute('people.detail'),
+  //   this.use('toLeft'),
+  //   this.reverse('toRight')
+  // );
+
+	this.transition(
+		this.childOf('#AnimatedNumber'),
+		this.use('toUp')
+	);
+};
+
