@@ -3,6 +3,7 @@ import Ember from 'ember';
 export default Ember.Route.extend({
 	index: 1,
 	id: null,
+	maxResults: 50,
 
 	model: function(params) {
 		this.set('id', params.id);
@@ -65,7 +66,7 @@ export default Ember.Route.extend({
 
 	// Loads more items depending on global index and max-results in endpoint()
 	loadItems: function() {
-		this.incrementProperty('index', 50);
+		this.incrementProperty('index', this.get('maxResults'));
 		// console.log('loadItems' + this.get('index'));
 
 		return Ember.$.getJSON(this.get('endpoint')).then(function(response) {
@@ -83,6 +84,6 @@ export default Ember.Route.extend({
 
 	// Set endpoint based on ID and current endpoint index
 	endpoint: function() {
-		return 'https://gdata.youtube.com/feeds/api/playlists/'+ this.get('id') +'?alt=jsonc&v=2&start-index='+ this.get('index') +'&max-results=50';
+		return 'https://gdata.youtube.com/feeds/api/playlists/'+ this.get('id') +'?alt=jsonc&v=2&start-index='+ this.get('index') +'&max-results=' + this.get('maxResults');
 	}.property('id', 'index'),
 });

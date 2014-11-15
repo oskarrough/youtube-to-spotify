@@ -10,10 +10,20 @@
 <hr>
 
 <ul class="List">
-{{#each items}}
-	<li {{bind-attr class="isMatched"}}>
-		{{title}}
-		{{!-- <img {{bind-attr src=thumbnail alt=title}}> --}}
+{{#each item in items}}
+	<li {{bind-attr class="item.isMatched"}}>
+		<img {{bind-attr src=item.thumbnail}}>
+		<h3>{{item.title}}</h3>
+
+		{{#if item.matches}}
+			<ul>
+				{{#each match in item.matches}}
+					<li>
+					<h4>{{match.artist}} - {{match.title}} <small>({{match.album}} from {{match.albumRelease}})</small></h4>
+					</li>
+				{{/each}}
+			</ul>
+		{{/if}}
 	</li>
 {{/each}}
 </ul>

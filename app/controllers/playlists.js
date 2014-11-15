@@ -1,71 +1,69 @@
 import Ember from 'ember';
 
 export default Ember.ObjectController.extend({
-	isLoading: false,
-	index: 1, // start index from where to search YouTube
+	needs: ['playlists/index'],
+	playlistsIndex: Ember.computed.alias('controllers.playlists/index'),
+	isMatching: false,
+	endpoint: 'http://ws.spotify.com/search/1/track.json?q=',
 
 	actions: {
-		convert: function() {
-			if (this.get('isLoading')) { return; }
-			this.startConversion();
+		match: function() {
+			if (this.get('isMatching')) { return; }
+
+			this.set('isMatching', true);
+			this.get('playlistsIndex').set('showMatched', true);
+
+			var promises = this.get('model.items').map(function(item) {
+				Ember.debug('map');
+				return this.matchItem(item);
+			}.bind(this));
+
+			Ember.RSVP.all(promises).then(function(results) {
+
+				// results contains an array of results for the given promises
+				// this.set('isMatching', false);
+				this.set('doneMatching', true);
+				// console.log(results);
+			}.bind(this)).catch(function(reason){
+				// if any of the promises fails.
+				// console.log(reason);
+			});
 		}
 	},
 
-	// Match the items with Spotify
-	startConversion: function() {
-		this.get('model.items').forEach(function(item) {
-			this.matchItem(item);
-		}.bind(this));
-	},
-
+	// Matches an item with one from Spotify
 	matchItem: function(item) {
-		var title = item.get('title');
-		var filteredTitle = this.filterTitle(title);
+		var _this = this;
+		var url = this.get('endpoint') + encodeURIComponent(item.get('cleanTitle'));
 
-		// Search for a matching track
-		var endpoint = 'http://ws.spotify.com/search/1/track.json?q=' + encodeURIComponent(filteredTitle);
-		return Ember.$.getJSON(endpoint).then(function(response) {
-			var track = response.tracks[0];
-			if (track) {
-				console.log('found' + track.artists[0].name);
+		return Ember.$.getJSON(url).then(function(response) {
+			var matches = response.tracks;
 
-				item.set('spotifyTitle', track.artists[0].name);
-				item.set('isMatched', true);
-				// insert(track.artists[0].name + ' - ' + track.name + '<small>(' + track.href + ')</small>', $success);
-				// insert(track.href + '<small>(' + track.artists[0].name + ' - ' + track.name + ')</small>', $success);
-			} else {
-				console.log('not found ' + filteredTitle + ' ('+ title +')');
+			// if tracks is empty, there is nothing…
+			if (!matches.length) {
 				item.set('isMatched', false);
-				// insert(name, $failed);
+				return false;
 			}
-		});
-	},
 
-	// would be nice to also filter out all years except 1999
-	filterTitle: function(name) {
-		name = name.match(/[\w']+/g)
-			.join(' ')
-			.replace(/official/ig, '')
-			.replace(/featuring/ig, '')
-			.replace(/feat/ig, '')
-			.replace(/video/ig, '')
-			.replace(/720p/ig, '')
-			.replace(/1080p/ig, '')
-			.replace(/version/ig, '')
-			.replace(/wmv/ig, '')
-			.replace(/7''/ig, '')
-			.replace(/12''/ig, '');
-		return name;
+			// we found something on spotify!
+			item.set('isMatched', true);
+
+			// create a nice array of matches
+			var newMatches = matches.map(function(match) {
+				return _this.get('store').createRecord('spotifyItem', {
+					artist: match.artists[0].name,
+					title: match.name,
+					album: match.album.name,
+					albumRelease: match.album.released,
+					url: match.href,
+					playlistItem: item
+				});
+			});
+
+			// push them to the item
+			matches.pushObjects(newMatches);
+
+			return true;
+		});
 	}
 });
-
-
-// console.log('Done searching YouTube from ' + start);
-
-// // Continue searching YouTube (50 results limit)
-// start += apilimit;
-// if (start < 1000) {
-// 	loadPage();
-// } else {
-// 	console.log('youtube 1000 limit reached');
-// }

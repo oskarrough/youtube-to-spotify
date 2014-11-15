@@ -1,8 +1,8 @@
-<article class="Playlist">
+<article {{bind-attr class=":Playlist doneMatching"}}>
 
+	{{!-- <p>Tap the button to search for it's videos on Spotify.</p> --}}
 	<h1 class="Playlist-title">{{title}}</h1>
-	<p class="Playlist-description">{{description}} - <em>by {{author}}</em></p>
-	<p><button {{action 'convert'}}>Convert these {{items.length}} songs</button></p>
+	{{!-- <p class="Playlist-description">{{description}} - <em>by {{author}}</em></p> --}}
 
 	<p><button {{bind-attr disabled=isMatching}} {{action 'match'}}>Search <span class="AnimatedNumber">{{liquid-bind items.length}}</span> songs</button></p>
 
