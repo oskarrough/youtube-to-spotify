@@ -1,3 +1,6 @@
+* {
+	box-sizing: border-box;
+}
 html,
 input,
 button {
@@ -15,7 +18,16 @@ h1,h2,h3,p,ul,form {
 }
 h1,
 h2 {
-	font-size: 1.6rem;
+	font-size: 1.5rem;
+}
+h3 {
+	// font-size: 1rem;
+}
+hr {
+	margin: 1rem 0;
+	border: 0;
+	height: 1px;
+	background: hsl(0, 0%, 80%);
 }
 p,
 input {
@@ -24,14 +36,33 @@ input {
 label {
 	user-select: none;
 }
+
+input[type="text"],
 button {
-	font-weight: bold;
-	padding: 0.4em 0.6em 0.3em;
 	font-size: 13px;
-	border-radius: 3px;
-	background: hsl(0, 100%, 100%);
+	line-height: normal;
 	border: 1px solid hsl(0, 0%, 70%);
+	border-radius: 3px;
+	padding: 0.4em 0.5em 0.3em;
+}
+input[type="text"] {
+
+}
+button {
+	display: inline-block;
+	font-weight: bold;
+	background-color: hsl(0, 100%, 100%);
 	background-image: linear-gradient(to bottom, hsl(0, 100%, 100%) 50%, hsl(0, 0%, 90%));
+
+	&:hover,
+	.zeroclipboard-is-hover > & {
+		cursor: pointer;
+		background-image: linear-gradient(to bottom, hsl(0, 100%, 100%) 50%, hsl(0, 0%, 80%));
+	}
+	&:active,
+	.zeroclipboard-is-active > & {
+		background-image: none;
+	}
 }
 
 
@@ -63,7 +94,9 @@ button {
 .Playlist-title {
 	display: inline-block;
 	margin-top: 1rem;
-	padding: 0.2em 0.5rem 0;
+	line-height: 1;
+	padding: 0.25em 0.5rem 0.24em;
+	transition: background-color 300ms;
 	background-color: #e62117;
 	color: white;
 	.done-matching & {
@@ -94,6 +127,6 @@ button {
 	}
 	.liquid-child {
 		// This prevents a slight horizontal wobble in firefox
-		width: 1.5em;
+		width: 1.3em;
 	}
 }

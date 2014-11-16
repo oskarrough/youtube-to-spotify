@@ -1,30 +1,39 @@
-<p>
-	<label class="Playlist-matched">
-		{{input type="checkbox" checked=showMatched}}
-		<span id="AnimatedNumber" class="AnimatedNumber">
-			{{liquid-bind matched.length}} matched
-		</span>
-	</label>
-</p>
+{{#if playlists.startedMatching}}
+	<p>Found <span id="AnimatedNumber" class="AnimatedNumber">{{liquid-bind matched.length}}</span> songs.{{doneText}}</p>
+{{/if}}
+
+{{#if playlists.doneMatching}}
+	<p>{{zero-clipboard cbTarget="MatchedItems" label="Copy them" action="afterCopy"}}</p>
+{{/if}}
+
+{{#if didCopy}}
+	<p>Copied! Open Spotify, go the playlist where you want the songs and press CMD+V (or CTRL+V on Windows) to paste them in. That's it!</p>
+{{/if}}
 
 <hr>
+
+<p>
+	<label class="Playlist-matched">{{input type="checkbox" checked=onlyMatched}} Only show matched</label>
+</p>
 
 <ul class="List">
 {{#each item in items}}
 	<li {{bind-attr class="item.isMatched"}}>
-		<img {{bind-attr src=item.thumbnail}}>
-		<h3>{{item.title}}</h3>
-
-		{{#if item.matches}}
+		{{!-- <img {{bind-attr src=item.thumbnail}}> --}}
+		{{item.title}}
+		{{!-- {{#if item.matches}}
 			<ul>
 				{{#each match in item.matches}}
-					<li>
-					<h4>{{match.artist}} - {{match.title}} <small>({{match.album}} from {{match.albumRelease}})</small></h4>
-					</li>
+					<li>{{match.artist}} - {{match.title}} <small>({{match.album}} from {{match.albumRelease}})</small></li>
 				{{/each}}
 			</ul>
-		{{/if}}
+		{{/if}} --}}
 	</li>
 {{/each}}
 </ul>
 
+<ul id="MatchedItems" style="display: none;">
+{{#each item in matchedItems}}
+	<li>{{item.matches.firstObject.url}}</li>
+{{/each}}
+</ul>

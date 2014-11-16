@@ -10,8 +10,9 @@ export default Ember.ObjectController.extend({
 		match: function() {
 			if (this.get('isMatching')) { return; }
 
+			this.set('startedMatching', true);
 			this.set('isMatching', true);
-			this.get('playlistsIndex').set('showMatched', true);
+			this.get('playlistsIndex').set('onlyMatched', true);
 
 			var promises = this.get('model.items').map(function(item) {
 				Ember.debug('map');
@@ -19,9 +20,8 @@ export default Ember.ObjectController.extend({
 			}.bind(this));
 
 			Ember.RSVP.all(promises).then(function(results) {
-
 				// results contains an array of results for the given promises
-				// this.set('isMatching', false);
+				this.set('isMatching', false);
 				this.set('doneMatching', true);
 				// console.log(results);
 			}.bind(this)).catch(function(reason){
