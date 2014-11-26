@@ -1,31 +1,28 @@
 import Ember from 'ember';
 
-export default Ember.ArrayController.extend({
+export default Ember.Controller.extend({
 	needs: ['playlists'],
 	playlists: Ember.computed.alias('controllers.playlists'),
+	showMatched: false,
 
-	onlyMatched: false,
+	// returns all matched items
+	matched: function() {
+		return this.get('model').filterBy('isMatched', true);
+	}.property('model.@each.isMatched'),
 
+	// returns either the content or filtered content
+	filteredModel: function() {
+		return this.get('showMatched') ? this.get('matched') : this.get('model');
+	}.property('showMatched', 'matched'),
+
+	// Updates UI according to state
+	// could also be in the template…
 	doneText: function() {
 		return this.get('playlists.doneMatching') ? ' Done.' : '';
 	}.property('playlists.doneMatching'),
 
-	matched: function() {
-		return this.filterBy('isMatched', true);
-	}.property('this.@each.isMatched'),
-
-	// returns the filtered channels if onlyMatched is true
-	// otherwise the default array
-	items: function() {
-		return this.get('onlyMatched') ? this.get('matchedItems') : this;
-	}.property('onlyMatched', 'matchedItems'),
-
-	// filters the array with our search value
-	matchedItems: function() {
-		return this.filterBy('isMatched', true);
-	}.property('this.@each.isMatched'),
-
 	actions: {
+		// after 'zero-clipboard-copy'
 		afterCopy: function() {
 			this.set('didCopy', true);
 		}

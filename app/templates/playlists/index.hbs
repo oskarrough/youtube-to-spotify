@@ -13,11 +13,11 @@
 <hr>
 
 <p>
-	<label class="Playlist-matched">{{input type="checkbox" checked=onlyMatched}} Only show matched</label>
+	<label class="Playlist-matched">{{input type="checkbox" checked=showMatched}} Only show matched</label>
 </p>
 
 <ul class="List">
-{{#each item in items}}
+{{#each item in filteredModel}}
 	<li {{bind-attr class="item.isMatched"}}>
 		{{!-- <img {{bind-attr src=item.thumbnail}}> --}}
 		{{item.title}}

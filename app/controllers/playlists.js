@@ -19,12 +19,11 @@ export default Ember.ObjectController.extend({
 				return this.matchItem(item);
 			}.bind(this));
 
-			Ember.RSVP.all(promises).then(function(results) {
+			Ember.RSVP.all(promises).then(function(/*promise*/) {
 				// results contains an array of results for the given promises
 				this.set('isMatching', false);
 				this.set('doneMatching', true);
-				// console.log(results);
-			}.bind(this)).catch(function(reason){
+			}.bind(this)).catch(function(/*reason*/){
 				// if any of the promises fails.
 				// console.log(reason);
 			});
