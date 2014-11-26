@@ -3,7 +3,7 @@ import Ember from 'ember';
 export default Ember.Controller.extend({
 	needs: ['playlists'],
 	playlists: Ember.computed.alias('controllers.playlists'),
-	showMatched: false,
+	showMatched: true,
 
 	// returns all matched items
 	matched: function() {
@@ -16,7 +16,7 @@ export default Ember.Controller.extend({
 	}.property('showMatched', 'matched'),
 
 	// Updates UI according to state
-	// could also be in the template…
+	// todo: could also be in the template…
 	doneText: function() {
 		return this.get('playlists.doneMatching') ? ' Done.' : '';
 	}.property('playlists.doneMatching'),

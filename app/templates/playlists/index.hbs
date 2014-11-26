@@ -7,14 +7,12 @@
 {{/if}}
 
 {{#if didCopy}}
-	<p>Copied! Open Spotify, go the playlist where you want the songs and press CMD+V (or CTRL+V on Windows) to paste them in. That's it!</p>
+	<p>Done! Open Spotify, go the playlist where you want your songs and paste them in using <em>CMD+V</em> (or <em>CTRL+V</em> on Windows) to paste them in. That's it!</p>
 {{/if}}
 
 <hr>
 
-<p>
-	<label class="Playlist-matched">{{input type="checkbox" checked=showMatched}} Only show matched</label>
-</p>
+<p><label class="Playlist-matched">{{input type="checkbox" checked=showMatched}} Only show matched</label></p>
 
 <ul class="List">
 {{#each item in filteredModel}}

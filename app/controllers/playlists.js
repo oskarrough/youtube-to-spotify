@@ -1,34 +1,36 @@
 import Ember from 'ember';
 
-export default Ember.ObjectController.extend({
+export default Ember.Controller.extend({
 	needs: ['playlists/index'],
 	playlistsIndex: Ember.computed.alias('controllers.playlists/index'),
-	isMatching: false,
 	endpoint: 'http://ws.spotify.com/search/1/track.json?q=',
+	startedMatching: false,
+	isMatching: false,
 
-	actions: {
-		match: function() {
-			if (this.get('isMatching')) { return; }
+	// as soon as we have a model
+	// start matching items with possible spotify items
+	startMatching: function() {
+		// make sure it doesn't run twice simultaneously
+		if (this.get('isMatching')) { return; }
 
-			this.set('startedMatching', true);
-			this.set('isMatching', true);
-			this.get('playlistsIndex').set('onlyMatched', true);
+		// indicate we're matching
+		this.set('startedMatching', true);
+		this.set('isMatching', true);
 
-			var promises = this.get('model.items').map(function(item) {
-				Ember.debug('map');
-				return this.matchItem(item);
-			}.bind(this));
+		// Create a promise for each item's 'matchItem'
+		var promises = this.get('model.items').map(function(item) {
+			return this.matchItem(item);
+		}.bind(this));
 
-			Ember.RSVP.all(promises).then(function(/*promise*/) {
-				// results contains an array of results for the given promises
-				this.set('isMatching', false);
-				this.set('doneMatching', true);
-			}.bind(this)).catch(function(/*reason*/){
-				// if any of the promises fails.
-				// console.log(reason);
-			});
-		}
-	},
+		// Wait for all promises to resolve
+		Ember.RSVP.all(promises).then(function(/*promise*/) {
+			this.set('isMatching', false);
+			this.set('doneMatching', true);
+		}.bind(this)).catch(function(/*reason*/){
+			// if any of the promises fails.
+			// console.log(reason);
+		});
+	}.observes('model'),
 
 	// Matches an item with one from Spotify
 	matchItem: function(item) {
