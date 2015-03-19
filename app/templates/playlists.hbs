@@ -1,7 +1,12 @@
 <article {{bind-attr class=":Playlist doneMatching"}}>
 	<h1 class="Playlist-title">{{model.title}}</h1>
 	{{!-- <p class="Playlist-description">{{description}} - <em>by {{author}}</em></p> --}}
-	<p><span class="AnimatedNumber">{{liquid-bind model.items.length}}</span> songs total.</p>
+	<p>
+		<span id="AnimatedNumber" class="AnimatedNumber">
+			{{!-- {{liquid-bind model.items.length}} --}}
+			{{model.items.length}}
+		</span> songs total.
+	</p>
 
 	{{outlet}}
 </article>

@@ -1,5 +1,10 @@
 {{#if playlists.startedMatching}}
-	<p>Found <span id="AnimatedNumber" class="AnimatedNumber">{{liquid-bind matched.length}}</span> songs.{{doneText}}</p>
+	<p>Found
+		<span id="AnimatedNumber" class="AnimatedNumber">
+			{{!-- {{liquid-bind matched.length}} --}}
+			{{matched.length}}
+		</span> songs.{{doneText}}
+	</p>
 {{/if}}
 
 {{#if playlists.doneMatching}}
