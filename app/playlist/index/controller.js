@@ -1,8 +1,8 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
-	needs: ['playlists'],
-	playlists: Ember.computed.alias('controllers.playlists'),
+	needs: ['playlist'],
+	playlist: Ember.computed.alias('controllers.playlist'),
 	showMatched: true,
 
 	// returns all matched items
@@ -18,8 +18,8 @@ export default Ember.Controller.extend({
 	// Updates UI according to state
 	// todo: could also be in the template…
 	doneText: function() {
-		return this.get('playlists.doneMatching') ? ' Done.' : '';
-	}.property('playlists.doneMatching'),
+		return this.get('playlist.doneMatching') ? ' Done.' : '';
+	}.property('playlist.doneMatching'),
 
 	actions: {
 		// after 'zero-clipboard-copy'

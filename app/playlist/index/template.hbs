@@ -1,4 +1,4 @@
-{{#if playlists.startedMatching}}
+{{#if playlist.startedMatching}}
 	<p>Found
 		<span id="AnimatedNumber" class="AnimatedNumber">
 			{{!-- {{liquid-bind matched.length}} --}}
@@ -7,13 +7,22 @@
 	</p>
 {{/if}}
 
-{{#if playlists.doneMatching}}
+{{#if playlist.doneMatching}}
 	<p>{{zero-clipboard cbTarget="MatchedItems" label="Copy them" action="afterCopy"}}</p>
 {{/if}}
 
 {{#if didCopy}}
-	<p>Done! Open Spotify, go the playlist where you want your songs and paste them in using <em>CMD+V</em> (or <em>CTRL+V</em> on Windows) to paste them in. That's it!</p>
+	<h3>Copied!</h3>
+	<p>Now you need to:</p>
+	<ol>
+		<li>Open Spotify</li>
+		<li>Create a new playlist (or just go to a playlist)</li>
+		<li>Paste the songs in using <em>CMD+V</em> (or <em>CTRL+V</em> on Windows)</li>
+	</ol>
+	<p>And then the songs should appear in the playlist after a second or two. You're welcome.</p>
 {{/if}}
+
+{{#unless didCopy}}
 
 <hr>
 
@@ -34,9 +43,11 @@
 	</li>
 {{/each}}
 </ul>
+{{/unless}}
 
 <ul id="MatchedItems" style="display: none;">
 	{{#each item in matched}}
 		<li>{{item.matches.firstObject.url}}</li>
 	{{/each}}
 </ul>
+

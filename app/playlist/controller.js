@@ -1,8 +1,8 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
-	needs: ['playlists/index'],
-	playlistsIndex: Ember.computed.alias('controllers.playlists/index'),
+	needs: ['playlist/index'],
+	playlistIndex: Ember.computed.alias('controllers.playlist/index'),
 	endpoint: 'http://ws.spotify.com/search/1/track.json?q=',
 	startedMatching: false,
 	isMatching: false,
