@@ -1,0 +1,14 @@
+*,
+*:after,
+*:before {
+	box-sizing: border-box;
+}
+
+html {
+	font-size: $base-font-size;
+	line-height: $base-line-height;
+}
+
+body {
+	margin: 2rem 1rem 0;
+}

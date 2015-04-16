@@ -1,41 +1,46 @@
-*, *:after, *:before {
-	box-sizing: border-box;
-}
-
 html,
 input,
 button {
 	font-family: $base-font-family;
 }
-html {
-	font-size: $base-font-size;
-	line-height: $base-line-height;
-}
-body {
-  margin: 1rem;
-}
-h1,h2,h3,p,ul,form {
+
+h1,
+h2,
+h3,
+p,
+ul,
+form {
 	margin: 0 0 1rem;
 }
+
 h1,
 h2 {
 	font-size: 1.5rem;
 }
+
 h3 {
 	// font-size: 1rem;
 }
+
 hr {
 	margin: 1rem 0;
 	border: 0;
 	height: 1px;
 	background: hsl(0, 0%, 80%);
 }
+
 p,
 input {
 	font-size: 14px;
 }
+
 label {
+	font-size: 14px;
 	user-select: none;
+
+	input {
+		margin-top: 0.5em;
+	}
 }
 
 input[type="text"],
@@ -46,9 +51,10 @@ button {
 	border-radius: 3px;
 	padding: 0.4em 0.5em 0.3em;
 }
-input[type="text"] {
 
+input[type="text"] {
 }
+
 button {
 	display: inline-block;
 	font-weight: bold;
@@ -64,4 +70,9 @@ button {
 	.zeroclipboard-is-active > & {
 		background-image: none;
 	}
+}
+
+a,
+a:visited {
+	color: green;
 }
