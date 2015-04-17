@@ -3,3 +3,11 @@
 <p>This is a small tool that migrates YouTube playlists to Spotify ones. It's very useful for that, actually.</p>
 
 <p>For whoever's interested I initially built it with jQuery (<a href="https://github.com/oskarrough/youtube-to-spotify/tree/master">source</a>) and am now rewriting it with Ember (<a href="https://github.com/oskarrough/youtube-to-spotify">source</a>). I'm using the Cousine typeface by Steve Matteson.</p>
+
+<h2>How does it work?</h2>
+
+<ol>
+	<li>All videos from a YouTube playlists are fetched</li>
+	<li>Private, blocked and deleted videos are filtered</li>
+	<li>We search for each video on Spotify and use the best match</li>
+</ol>

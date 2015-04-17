@@ -1,9 +1,9 @@
 <h1 class="Logo">
-	{{#link-to 'index'}}&larr; Youtube to Spotify{{/link-to}}
+	{{#link-to 'index'}}&larr;{{/link-to}} {{model.title}}
 </h1>
 
 <article {{bind-attr class=":Playlist doneMatching"}}>
-	<h1 class="Playlist-title">{{model.title}}</h1>
+	{{!-- <h1 class="Playlist-title">{{model.title}}</h1> --}}
 	{{!-- <p class="Playlist-description">{{description}} - <em>by {{author}}</em></p> --}}
 	<p>
 		<span id="AnimatedNumber" class="AnimatedNumber">
