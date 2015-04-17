@@ -5,71 +5,77 @@ export default Ember.Route.extend({
 	id: null,
 	maxResults: 50,
 
+	// Set endpoint based on ID and current endpoint index
+	endpoint: Ember.computed('id', 'index', function() {
+		return 'https://gdata.youtube.com/feeds/api/playlists/'+ this.get('id') +'?alt=jsonc&v=2&start-index='+ this.get('index') +'&max-results=' + this.get('maxResults');
+	}),
+
+	// Returns a playlist
 	model: function(params) {
 		this.set('id', params.id);
 
 		// Find the playlist via the YouTube API
-		return Ember.$.getJSON(this.get('endpoint')).then(function(response) {
-
-			var playlist = this.get('store').createRecord('playlist', {
+		return Ember.$.getJSON(this.get('endpoint')).then((response) => {
+			return this.get('store').createRecord('playlist', {
 				id: params.playlist_id,
 				title: response.data.title,
 				description: response.data.description,
 				thumbnail: response.data.thumbnail.sqDefault,
-				author: response.data.author
-				// we can not set items here because it's a relationship
+				author: response.data.author,
+				rawItems: response.data.items
 			});
 
-			this.set('initialItems', response.data.items);
-
-			return playlist;
-
-		}.bind(this)).fail(function() {
+		}).fail(function() {
 			console.log('fail');
 		});
 	},
 
-	afterModel: function(model) {
+	afterModel(model) {
+
+		// todo: because currentModel seems to be undefined…
 		this.set('model', model);
-		this.addItems(this.get('initialItems'));
-	},
 
-	addItems: function(items) {
-
-		// Filter out deleted and private videos
-		// TODO: couldn't do it with one single filter, don't know why
-		var filteredItems = items.filter(function(item) {
-			if (item.video.title !== 'Deleted video') {
-				return true;
-			}
-		}).filter(function(item) {
-			if (item.video.title !== 'Private video') {
-				return true;
-			}
+		// convert the raw items to ember models
+		model.get('rawItems').forEach((item) => {
+			this.createPlaylistItem(item);
 		});
 
+		// Try to load more
+		this.fetchMoreItems();
+	},
+
+	createPlaylistItem(item) {
+
+		// Filter out deleted
+		if (item.video.title === 'Deleted video') {
+			return false;
+		}
+
+		// and private items
+		if (item.video.title === 'Private video') {
+			return false;
+		}
+
 		// Convert the remaining to real models
-		var itemModels = filteredItems.map(function(item) {
-			return this.get('store').createRecord('playlistItem', {
-				id: item.video.id,
-				title: item.video.title,
-				thumbnail: item.video.thumbnail.sqDefault
-			});
-		}.bind(this));
+		var playlistItem = this.store.createRecord('playlistItem', {
+			id: item.video.id,
+			title: item.video.title,
+			thumbnail: item.video.thumbnail.sqDefault
+		});
+
+		// Ember.debug(this.get('model.'));
+		Ember.debug(this.get('model.items'));
 
 		// Push them to the playlist
-		this.get('model').get('items').pushObjects(itemModels);
-
-		// Try to load more
-		this.loadItems();
+		this.get('model.items').addObject(playlistItem);
 	},
 
 	// Loads more items depending on global index and max-results in endpoint()
-	loadItems: function() {
+	fetchMoreItems() {
 		this.incrementProperty('index', this.get('maxResults'));
 		// console.log('loadItems' + this.get('index'));
 
-		return Ember.$.getJSON(this.get('endpoint')).then(function(response) {
+		return Ember.$.getJSON(this.get('endpoint')).then((response) => {
 			var items = response.data.items;
 
 			// Break if we have no (more) items
@@ -78,12 +84,12 @@ export default Ember.Route.extend({
 				return false;
 			}
 
-			this.addItems(items);
-		}.bind(this));
-	},
+			items.forEach((item) => {
+				this.createPlaylistItem(item);
+			});
 
-	// Set endpoint based on ID and current endpoint index
-	endpoint: function() {
-		return 'https://gdata.youtube.com/feeds/api/playlists/'+ this.get('id') +'?alt=jsonc&v=2&start-index='+ this.get('index') +'&max-results=' + this.get('maxResults');
-	}.property('id', 'index'),
+			// Try to load more
+			this.fetchMoreItems();
+		});
+	}
 });

@@ -7,5 +7,6 @@ export default DS.Model.extend({
 	author: DS.attr('string'),
 
 	// not async because of the localstorage adapter
+	rawItems: DS.attr(),
 	items: DS.hasMany('playlistItem')
 });

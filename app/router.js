@@ -7,5 +7,5 @@ var Router = Ember.Router.extend({
 
 export default Router.map(function() {
   this.route('about');
-  this.route('playlist', { path: ':id' }, function() {});
+  this.route('playlist', { path: ':id' });
 });

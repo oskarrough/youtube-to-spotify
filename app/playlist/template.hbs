@@ -9,8 +9,11 @@
 		<span id="AnimatedNumber" class="AnimatedNumber">
 			{{!-- {{liquid-bind model.items.length}} --}}
 			{{model.items.length}}
-		</span> songs total.
+		</span>
+		songs total.
 	</p>
+
+	{{playlist-items startedMatching=startedMatching doneMatching=doneMatching items=model.items}}
 
 	{{outlet}}
 </article>

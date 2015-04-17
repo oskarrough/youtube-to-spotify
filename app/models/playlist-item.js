@@ -1,3 +1,4 @@
+import Ember from 'ember';
 import DS from 'ember-data';
 
 export default DS.Model.extend({
@@ -8,7 +9,7 @@ export default DS.Model.extend({
 	matches: DS.hasMany('spotifyItem'),
 
 	// would be nice to also filter out all years except 1999 ??
-	cleanTitle: function() {
+	cleanTitle: Ember.computed('title', function() {
 		return this.get('title').match(/[\w']+/g)
 			.join(' ')
 			.replace(/official/ig, '')
@@ -21,5 +22,5 @@ export default DS.Model.extend({
 			.replace(/wmv/ig, '')
 			.replace(/7''/ig, '')
 			.replace(/12''/ig, '');
-	}.property('title')
+	})
 });

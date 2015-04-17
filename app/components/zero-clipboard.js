@@ -3,8 +3,9 @@ import ZeroClipboard from 'ember-cli-zero-clipboard/components/zero-clipboard';
 
 export default ZeroClipboard.extend({
 	actions: {
+
 		// this gets triggered after the copy event
-		afterCopy: function() {
+		afterCopy() {
 			console.log('afterCopy');
 			this.sendAction();
 		}
