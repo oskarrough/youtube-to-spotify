@@ -7,7 +7,12 @@ export default Ember.Controller.extend({
 
 	// as soon as we have a model
 	// start matching items with possible spotify items
-	startMatching: Ember.observer('model', function() {
+	startMatching: Ember.observer('model.items.[]', function() {
+		console.log('startMatching');
+
+		Ember.run.next(() => {
+			console.log('startMatching next');
+		});
 
 		// make sure it doesn't run twice simultaneously
 		if (this.get('isMatching')) { return; }
@@ -22,12 +27,11 @@ export default Ember.Controller.extend({
 		}.bind(this));
 
 		// Wait for all promises to resolve
-		Ember.RSVP.all(promises).then(function(/*promise*/) {
+		Ember.RSVP.all(promises).then((/*promise*/) => {
 			this.set('isMatching', false);
 			this.set('doneMatching', true);
-		}.bind(this)).catch((/*reason*/) => {
-			// if any of the promises fails.
-			// console.log(reason);
+		}).catch((reason) => {
+			console.log(reason);
 		});
 	}),
 
@@ -36,31 +40,29 @@ export default Ember.Controller.extend({
 		var url = this.get('endpoint') + encodeURIComponent(item.get('cleanTitle'));
 
 		return Ember.$.getJSON(url).then((response) => {
-			var matches = response.tracks;
+			var results = response.tracks;
 
-			// if tracks is empty, there is nothing…
-			if (!matches.length) {
-				item.set('isMatched', false);
+			item.set('isMatched', Boolean(results.length));
+
+			// stop if we have no results
+			if (!results.length) {
 				return false;
 			}
 
-			// we found something on spotify!
-			item.set('isMatched', true);
-
-			// create a nice array of matches
-			var newMatches = matches.map((match) => {
+			// create a nice array of results
+			var newResults = results.map((result) => {
 				return this.get('store').createRecord('spotifyItem', {
-					artist: match.artists[0].name,
-					title: match.name,
-					album: match.album.name,
-					albumRelease: match.album.released,
-					url: match.href,
+					artist: result.artists[0].name,
+					title: result.name,
+					album: result.album.name,
+					albumRelease: result.album.released,
+					url: result.href,
 					playlistItem: item
 				});
 			});
 
 			// push them
-			return matches.pushObjects(newMatches);
+			return results.pushObjects(newResults);
 		});
 	}
 });
